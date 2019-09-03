@@ -231,7 +231,6 @@ JAYLINK_PRIV int transport_tcp_open(struct jaylink_device_handle *devh)
 	struct jaylink_device *dev;
 	struct addrinfo hints;
 	struct addrinfo *info;
-	struct addrinfo *rp;
 	int sock;
 
 	dev = devh->dev;
@@ -262,7 +261,7 @@ JAYLINK_PRIV int transport_tcp_open(struct jaylink_device_handle *devh)
 
 	sock = -1;
 
-	for (rp = info; rp != NULL; rp = rp->ai_next) {
+	for (struct addrinfo *rp = info; rp != NULL; rp = rp->ai_next) {
 		sock = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
 
 		if (sock < 0)

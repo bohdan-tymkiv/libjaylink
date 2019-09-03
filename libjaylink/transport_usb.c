@@ -54,7 +54,6 @@ static int initialize_handle(struct jaylink_device_handle *devh)
 	bool found_interface;
 	bool found_endpoint_in;
 	bool found_endpoint_out;
-	uint8_t i;
 
 	ctx = devh->dev->ctx;
 	devh->interface_number = 0;
@@ -73,7 +72,7 @@ static int initialize_handle(struct jaylink_device_handle *devh)
 
 	found_interface = false;
 
-	for (i = 0; i < config->bNumInterfaces; i++) {
+	for (uint8_t i = 0; i < config->bNumInterfaces; i++) {
 		interface = &config->interface[i];
 		desc = &interface->altsetting[0];
 
@@ -100,7 +99,7 @@ static int initialize_handle(struct jaylink_device_handle *devh)
 	found_endpoint_in = false;
 	found_endpoint_out = false;
 
-	for (i = 0; i < desc->bNumEndpoints; i++) {
+	for (uint8_t i = 0; i < desc->bNumEndpoints; i++) {
 		epdesc = &desc->endpoint[i];
 
 		if (epdesc->bEndpointAddress & LIBUSB_ENDPOINT_IN) {

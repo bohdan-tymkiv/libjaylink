@@ -141,7 +141,6 @@ JAYLINK_API int jaylink_get_devices(struct jaylink_context *ctx,
 	struct list *item;
 	struct jaylink_device **tmp;
 	struct jaylink_device *dev;
-	size_t i;
 
 	if (!ctx || !devs)
 		return JAYLINK_ERR_ARG;
@@ -156,7 +155,7 @@ JAYLINK_API int jaylink_get_devices(struct jaylink_context *ctx,
 
 	item = ctx->discovered_devs;
 
-	for (i = 0; i < num; i++) {
+	for (size_t i = 0; i < num; i++) {
 		dev = (struct jaylink_device *)item->data;
 		tmp[i] = jaylink_ref_device(dev);
 		item = item->next;
@@ -183,13 +182,11 @@ JAYLINK_API int jaylink_get_devices(struct jaylink_context *ctx,
  */
 JAYLINK_API void jaylink_free_devices(struct jaylink_device **devs, bool unref)
 {
-	size_t i;
-
 	if (!devs)
 		return;
 
 	if (unref) {
-		for (i = 0; devs[i]; i++)
+		for (size_t i = 0; devs[i]; i++)
 			jaylink_unref_device(devs[i]);
 	}
 
@@ -807,7 +804,6 @@ JAYLINK_API int jaylink_get_hardware_info(struct jaylink_device_handle *devh,
 	int ret;
 	struct jaylink_context *ctx;
 	uint8_t buf[5];
-	unsigned int i;
 	unsigned int num;
 	unsigned int length;
 
@@ -817,7 +813,7 @@ JAYLINK_API int jaylink_get_hardware_info(struct jaylink_device_handle *devh,
 	ctx = devh->dev->ctx;
 	num = 0;
 
-	for (i = 0; i < 32; i++) {
+	for (unsigned int i = 0; i < 32; i++) {
 		if (mask & (1 << i))
 			num++;
 	}
@@ -851,7 +847,7 @@ JAYLINK_API int jaylink_get_hardware_info(struct jaylink_device_handle *devh,
 		return ret;
 	}
 
-	for (i = 0; i < num; i++)
+	for (unsigned int i = 0; i < num; i++)
 		info[i] = buffer_get_u32((uint8_t *)info,
 			i * sizeof(uint32_t));
 
@@ -887,7 +883,6 @@ JAYLINK_API int jaylink_get_counters(struct jaylink_device_handle *devh,
 	int ret;
 	struct jaylink_context *ctx;
 	uint8_t buf[5];
-	unsigned int i;
 	unsigned int num;
 	unsigned int length;
 
@@ -897,7 +892,7 @@ JAYLINK_API int jaylink_get_counters(struct jaylink_device_handle *devh,
 	ctx = devh->dev->ctx;
 	num = 0;
 
-	for (i = 0; i < 32; i++) {
+	for (unsigned int i = 0; i < 32; i++) {
 		if (mask & (1 << i))
 			num++;
 	}
@@ -930,7 +925,7 @@ JAYLINK_API int jaylink_get_counters(struct jaylink_device_handle *devh,
 		return ret;
 	}
 
-	for (i = 0; i < num; i++)
+	for (unsigned int i = 0; i < num; i++)
 		values[i] = buffer_get_u32((uint8_t *)values,
 			i * sizeof(uint32_t));
 
@@ -1387,13 +1382,12 @@ JAYLINK_API int jaylink_write_raw_config(struct jaylink_device_handle *devh,
 static void parse_conn_table(struct jaylink_connection *conns,
 		const uint8_t *buffer, uint16_t num, uint16_t entry_size)
 {
-	unsigned int i;
 	size_t offset;
 	struct in_addr in;
 
 	offset = 0;
 
-	for (i = 0; i < num; i++) {
+	for (unsigned int i = 0; i < num; i++) {
 		conns[i].pid = buffer_get_u32(buffer, offset);
 
 		in.s_addr = buffer_get_u32(buffer, offset + 4);
@@ -1463,7 +1457,6 @@ static bool _inet_pton(const char *str, struct in_addr *in)
  *         struct jaylink_connection conns[JAYLINK_MAX_CONNECTIONS];
  *         bool found_handle;
  *         size_t count;
- *         size_t i;
  *
  *         conn->handle = 0;
  *         conn->pid = 0;
@@ -1481,7 +1474,7 @@ static bool _inet_pton(const char *str, struct in_addr *in)
  *
  *         found_handle = false;
  *
- *         for (i = 0; i < count; i++) {
+ *         for (size_t i = 0; i < count; i++) {
  *                 if (conns[i].handle == conn->handle) {
  *                         found_handle = true;
  *                         break;

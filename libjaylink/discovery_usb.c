@@ -138,7 +138,6 @@ static struct jaylink_device *probe_device(struct jaylink_context *ctx,
 	uint32_t serial_number;
 	bool valid_serial_number;
 	bool found_device;
-	size_t i;
 
 	ret = libusb_get_device_descriptor(usb_dev, &desc);
 
@@ -153,7 +152,7 @@ static struct jaylink_device *probe_device(struct jaylink_context *ctx,
 
 	found_device = false;
 
-	for (i = 0; i < sizeof(pids) / sizeof(pids[0]); i++) {
+	for (size_t i = 0; i < sizeof(pids) / sizeof(pids[0]); i++) {
 		if (pids[i][0] == desc.idProduct) {
 			found_device = true;
 			usb_address = pids[i][1];
@@ -249,7 +248,6 @@ JAYLINK_PRIV int discovery_usb_scan(struct jaylink_context *ctx)
 	struct libusb_device **devs;
 	struct jaylink_device *dev;
 	size_t num;
-	size_t i;
 
 	ret = libusb_get_device_list(ctx->usb_ctx, &devs);
 
@@ -265,7 +263,7 @@ JAYLINK_PRIV int discovery_usb_scan(struct jaylink_context *ctx)
 
 	num = 0;
 
-	for (i = 0; devs[i]; i++) {
+	for (size_t i = 0; devs[i]; i++) {
 		dev = probe_device(ctx, devs[i]);
 
 		if (!dev)
