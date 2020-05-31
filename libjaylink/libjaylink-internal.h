@@ -95,13 +95,13 @@ struct jaylink_device {
 	 * real serial number of the device.
 	 */
 	uint32_t serial_number;
-	/** Indicates whether the serial number is valid. */
-	bool valid_serial_number;
+	/** Indicates whether the serial number is available. */
+	bool has_serial_number;
 #ifdef HAVE_LIBUSB
 	/** libusb device instance. */
 	struct libusb_device *usb_dev;
 	/** USB address of the device. */
-	uint8_t usb_address;
+	enum jaylink_usb_address usb_address;
 #endif
 	/**
 	 * IPv4 address.

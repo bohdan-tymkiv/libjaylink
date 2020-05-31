@@ -239,7 +239,7 @@ JAYLINK_API int jaylink_device_get_serial_number(
 	if (!dev || !serial_number)
 		return JAYLINK_ERR_ARG;
 
-	if (!dev->valid_serial_number)
+	if (!dev->has_serial_number)
 		return JAYLINK_ERR_NOT_AVAILABLE;
 
 	*serial_number = dev->serial_number;

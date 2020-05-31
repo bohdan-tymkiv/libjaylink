@@ -129,7 +129,7 @@ static bool parse_adv_message(struct jaylink_device *dev,
 	dev->has_mac_address = true;
 
 	dev->serial_number = buffer_get_u32(buffer, 48);
-	dev->valid_serial_number = true;
+	dev->has_serial_number = true;
 
 	tmp = buffer_get_u32(buffer, 52);
 	dev->hw_version.type = (tmp / 1000000) % 100;
@@ -205,7 +205,7 @@ static struct jaylink_device *probe_device(struct jaylink_context *ctx,
 	dev->iface = JAYLINK_HIF_TCP;
 
 	dev->serial_number = tmp.serial_number;
-	dev->valid_serial_number = tmp.valid_serial_number;
+	dev->has_serial_number = tmp.has_serial_number;
 
 	memcpy(dev->ipv4_address, tmp.ipv4_address, sizeof(dev->ipv4_address));
 

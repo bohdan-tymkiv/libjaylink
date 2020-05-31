@@ -43,27 +43,30 @@
 #define USB_VENDOR_ID			0x1366
 
 /* USB Product IDs (PID) and their corresponding USB addresses. */
-static const uint16_t pids[][2] = {
-	{0x0101, 0},
-	{0x0102, 1},
-	{0x0103, 2},
-	{0x0104, 3},
-	{0x0105, 0},
-	{0x0107, 0},
-	{0x0108, 0},
-	{0x1010, 0},
-	{0x1011, 0},
-	{0x1012, 0},
-	{0x1013, 0},
-	{0x1014, 0},
-	{0x1015, 0},
-	{0x1016, 0},
-	{0x1017, 0},
-	{0x1018, 0},
-	{0x1020, 0},
-	{0x1051, 0},
-	{0x1055, 0},
-	{0x1061, 0}
+static const struct {
+	uint16_t pid;
+	enum jaylink_usb_address usb_address;
+} pids[] = {
+	{0x0101, JAYLINK_USB_ADDRESS_0},
+	{0x0102, JAYLINK_USB_ADDRESS_1},
+	{0x0103, JAYLINK_USB_ADDRESS_2},
+	{0x0104, JAYLINK_USB_ADDRESS_3},
+	{0x0105, JAYLINK_USB_ADDRESS_0},
+	{0x0107, JAYLINK_USB_ADDRESS_0},
+	{0x0108, JAYLINK_USB_ADDRESS_0},
+	{0x1010, JAYLINK_USB_ADDRESS_0},
+	{0x1011, JAYLINK_USB_ADDRESS_0},
+	{0x1012, JAYLINK_USB_ADDRESS_0},
+	{0x1013, JAYLINK_USB_ADDRESS_0},
+	{0x1014, JAYLINK_USB_ADDRESS_0},
+	{0x1015, JAYLINK_USB_ADDRESS_0},
+	{0x1016, JAYLINK_USB_ADDRESS_0},
+	{0x1017, JAYLINK_USB_ADDRESS_0},
+	{0x1018, JAYLINK_USB_ADDRESS_0},
+	{0x1020, JAYLINK_USB_ADDRESS_0},
+	{0x1051, JAYLINK_USB_ADDRESS_0},
+	{0x1055, JAYLINK_USB_ADDRESS_0},
+	{0x1061, JAYLINK_USB_ADDRESS_0}
 };
 
 /** Maximum length of the USB string descriptor for the serial number. */
@@ -136,9 +139,9 @@ static struct jaylink_device *probe_device(struct jaylink_context *ctx,
 	struct libusb_device_handle *usb_devh;
 	struct jaylink_device *dev;
 	char buf[USB_SERIAL_NUMBER_LENGTH + 1];
-	uint8_t usb_address;
+	enum jaylink_usb_address usb_address;
 	uint32_t serial_number;
-	bool valid_serial_number;
+	bool has_serial_number;
 	bool found_device;
 
 	ret = libusb_get_device_descriptor(usb_dev, &desc);
@@ -155,9 +158,9 @@ static struct jaylink_device *probe_device(struct jaylink_context *ctx,
 	found_device = false;
 
 	for (size_t i = 0; i < sizeof(pids) / sizeof(pids[0]); i++) {
-		if (pids[i][0] == desc.idProduct) {
+		if (pids[i].pid == desc.idProduct) {
+			usb_address = pids[i].usb_address;
 			found_device = true;
-			usb_address = pids[i][1];
 			break;
 		}
 	}
@@ -179,7 +182,7 @@ static struct jaylink_device *probe_device(struct jaylink_context *ctx,
 	if (dev) {
 		log_dbg(ctx, "Device: USB address = %u.", dev->usb_address);
 
-		if (dev->valid_serial_number)
+		if (dev->has_serial_number)
 			log_dbg(ctx, "Device: Serial number = %u.",
 				dev->serial_number);
 		else
@@ -199,7 +202,7 @@ static struct jaylink_device *probe_device(struct jaylink_context *ctx,
 	}
 
 	serial_number = 0;
-	valid_serial_number = true;
+	has_serial_number = true;
 
 	ret = libusb_get_string_descriptor_ascii(usb_devh, desc.iSerialNumber,
 		(unsigned char *)buf, USB_SERIAL_NUMBER_LENGTH + 1);
@@ -209,10 +212,10 @@ static struct jaylink_device *probe_device(struct jaylink_context *ctx,
 	if (ret < 0) {
 		log_warn(ctx, "Failed to retrieve serial number: %s.",
 			libusb_error_name(ret));
-		valid_serial_number = false;
+		has_serial_number = false;
 	}
 
-	if (valid_serial_number) {
+	if (has_serial_number) {
 		if (!parse_serial_number(buf, &serial_number)) {
 			log_warn(ctx, "Failed to parse serial number.");
 			return NULL;
@@ -221,7 +224,7 @@ static struct jaylink_device *probe_device(struct jaylink_context *ctx,
 
 	log_dbg(ctx, "Device: USB address = %u.", usb_address);
 
-	if (valid_serial_number)
+	if (has_serial_number)
 		log_dbg(ctx, "Device: Serial number = %u.", serial_number);
 	else
 		log_dbg(ctx, "Device: Serial number = N/A.");
@@ -239,7 +242,7 @@ static struct jaylink_device *probe_device(struct jaylink_context *ctx,
 	dev->usb_dev = libusb_ref_device(usb_dev);
 	dev->usb_address = usb_address;
 	dev->serial_number = serial_number;
-	dev->valid_serial_number = valid_serial_number;
+	dev->has_serial_number = has_serial_number;
 
 	return dev;
 }
