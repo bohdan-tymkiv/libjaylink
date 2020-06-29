@@ -573,6 +573,8 @@ JAYLINK_API int jaylink_parse_serial_number(const char *str,
 		uint32_t *serial_number);
 JAYLINK_API const char *jaylink_hardware_type_string(
 		enum jaylink_hardware_type type);
+JAYLINK_API const char *jaylink_target_interface_string(
+		enum jaylink_target_interface iface);
 
 /*--- swd.c -----------------------------------------------------------------*/
 

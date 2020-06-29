@@ -91,3 +91,34 @@ JAYLINK_API const char *jaylink_hardware_type_string(
 
 	return NULL;
 }
+
+/**
+ * Get the string representation of a target interface.
+ *
+ * @param[in] iface Target interface.
+ *
+ * @return The string representation of the given target interface, or NULL
+ *         for an unknown interface.
+ *
+ * @since 0.3.0
+ */
+JAYLINK_API const char *jaylink_target_interface_string(
+		enum jaylink_target_interface iface)
+{
+	switch (iface) {
+	case JAYLINK_TIF_JTAG:
+		return "JTAG";
+	case JAYLINK_TIF_SWD:
+		return "SWD";
+	case JAYLINK_TIF_BDM3:
+		return "BDM3";
+	case JAYLINK_TIF_FINE:
+		return "FINE";
+	case JAYLINK_TIF_2W_JTAG_PIC32:
+		return "2-wire JTAG for PIC32";
+	default:
+		break;
+	}
+
+	return NULL;
+}
