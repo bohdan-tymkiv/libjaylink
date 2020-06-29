@@ -64,3 +64,30 @@ JAYLINK_API int jaylink_parse_serial_number(const char *str,
 
 	return JAYLINK_OK;
 }
+
+/**
+ * Get the string representation of a hardware type.
+ *
+ * @param[in] type Hardware type.
+ *
+ * @return The string representation of the given hardware type, or NULL
+ *         for an unknown type.
+ *
+ * @since 0.3.0
+ */
+JAYLINK_API const char *jaylink_hardware_type_string(
+		enum jaylink_hardware_type type)
+{
+	switch (type) {
+	case JAYLINK_HW_TYPE_JLINK:
+		return "J-Link";
+	case JAYLINK_HW_TYPE_FLASHER:
+		return "Flasher";
+	case JAYLINK_HW_TYPE_JLINK_PRO:
+		return "J-Link PRO";
+	default:
+		break;
+	}
+
+	return NULL;
+}

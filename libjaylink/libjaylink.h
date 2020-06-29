@@ -571,6 +571,8 @@ JAYLINK_API const char *jaylink_log_get_domain(
 
 JAYLINK_API int jaylink_parse_serial_number(const char *str,
 		uint32_t *serial_number);
+JAYLINK_API const char *jaylink_hardware_type_string(
+		enum jaylink_hardware_type type);
 
 /*--- swd.c -----------------------------------------------------------------*/
 
