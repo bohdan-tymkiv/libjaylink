@@ -87,7 +87,7 @@ JAYLINK_API int jaylink_discovery_scan(struct jaylink_context *ctx,
 		ret = discovery_usb_scan(ctx);
 
 		if (ret != JAYLINK_OK) {
-			log_err(ctx, "USB device discovery failed.");
+			log_err(ctx, "USB device discovery failed");
 			return ret;
 		}
 	}
@@ -97,7 +97,7 @@ JAYLINK_API int jaylink_discovery_scan(struct jaylink_context *ctx,
 		ret = discovery_tcp_scan(ctx);
 
 		if (ret != JAYLINK_OK) {
-			log_err(ctx, "TCP/IP device discovery failed.");
+			log_err(ctx, "TCP/IP device discovery failed");
 			return ret;
 		}
 	}

@@ -108,7 +108,7 @@ JAYLINK_API int jaylink_jtag_io(struct jaylink_device_handle *devh,
 		read_length, true);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_write_read() failed: %s.",
+		log_err(ctx, "transport_start_write_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -120,7 +120,7 @@ JAYLINK_API int jaylink_jtag_io(struct jaylink_device_handle *devh,
 	ret = transport_write(devh, buf, 4);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_write() failed: %s.",
+		log_err(ctx, "transport_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -128,7 +128,7 @@ JAYLINK_API int jaylink_jtag_io(struct jaylink_device_handle *devh,
 	ret = transport_write(devh, tms, num_bytes);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_write() failed: %s.",
+		log_err(ctx, "transport_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -136,7 +136,7 @@ JAYLINK_API int jaylink_jtag_io(struct jaylink_device_handle *devh,
 	ret = transport_write(devh, tdi, num_bytes);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_write() failed: %s.",
+		log_err(ctx, "transport_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -144,7 +144,7 @@ JAYLINK_API int jaylink_jtag_io(struct jaylink_device_handle *devh,
 	ret = transport_read(devh, tdo, num_bytes);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_read() failed: %s.",
+		log_err(ctx, "transport_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -155,7 +155,7 @@ JAYLINK_API int jaylink_jtag_io(struct jaylink_device_handle *devh,
 	ret = transport_read(devh, &status, 1);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_read() failed: %s.",
+		log_err(ctx, "transport_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -163,7 +163,7 @@ JAYLINK_API int jaylink_jtag_io(struct jaylink_device_handle *devh,
 	if (status == JTAG_IO_ERR_NO_MEMORY) {
 		return JAYLINK_ERR_DEV_NO_MEMORY;
 	} else if (status > 0) {
-		log_err(ctx, "JTAG I/O operation failed: 0x%x.", status);
+		log_err(ctx, "JTAG I/O operation failed: 0x%x", status);
 		return JAYLINK_ERR_DEV;
 	}
 
@@ -196,7 +196,7 @@ JAYLINK_API int jaylink_jtag_clear_trst(struct jaylink_device_handle *devh)
 	ret = transport_start_write(devh, 1, true);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_write() failed: %s.",
+		log_err(ctx, "transport_start_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -206,7 +206,7 @@ JAYLINK_API int jaylink_jtag_clear_trst(struct jaylink_device_handle *devh)
 	ret = transport_write(devh, buf, 1);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_write() failed: %s.",
+		log_err(ctx, "transport_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -240,7 +240,7 @@ JAYLINK_API int jaylink_jtag_set_trst(struct jaylink_device_handle *devh)
 	ret = transport_start_write(devh, 1, true);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_write() failed: %s.",
+		log_err(ctx, "transport_start_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -250,7 +250,7 @@ JAYLINK_API int jaylink_jtag_set_trst(struct jaylink_device_handle *devh)
 	ret = transport_write(devh, buf, 1);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_write() failed: %s.",
+		log_err(ctx, "transport_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}

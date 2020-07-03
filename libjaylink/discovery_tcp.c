@@ -160,46 +160,46 @@ static struct jaylink_device *probe_device(struct jaylink_context *ctx,
 	 * Use inet_ntoa() instead of inet_ntop() because the latter requires
 	 * at least Windows Vista.
 	 */
-	log_dbg(ctx, "Received advertisement message (IPv4 address = %s).",
+	log_dbg(ctx, "Received advertisement message (IPv4 address = %s)",
 		inet_ntoa(addr->sin_addr));
 
 	if (!parse_adv_message(&tmp, buffer)) {
-		log_dbg(ctx, "Received invalid advertisement message.");
+		log_dbg(ctx, "Received invalid advertisement message");
 		return NULL;
 	}
 
-	log_dbg(ctx, "Found device (IPv4 address = %s).", tmp.ipv4_address);
-	log_dbg(ctx, "Device: MAC address = %02x:%02x:%02x:%02x:%02x:%02x.",
+	log_dbg(ctx, "Found device (IPv4 address = %s)", tmp.ipv4_address);
+	log_dbg(ctx, "Device: MAC address = %02x:%02x:%02x:%02x:%02x:%02x",
 		tmp.mac_address[0], tmp.mac_address[1], tmp.mac_address[2],
 		tmp.mac_address[3], tmp.mac_address[4], tmp.mac_address[5]);
-	log_dbg(ctx, "Device: Serial number = %u.", tmp.serial_number);
+	log_dbg(ctx, "Device: Serial number = %u", tmp.serial_number);
 
 	if (tmp.has_product_name)
-		log_dbg(ctx, "Device: Product = %s.", tmp.product_name);
+		log_dbg(ctx, "Device: Product = %s", tmp.product_name);
 
 	if (tmp.has_nickname)
-		log_dbg(ctx, "Device: Nickname = %s.", tmp.nickname);
+		log_dbg(ctx, "Device: Nickname = %s", tmp.nickname);
 
 	dev = find_device(ctx->discovered_devs, &tmp);
 
 	if (dev) {
-		log_dbg(ctx, "Ignoring already discovered device.");
+		log_dbg(ctx, "Ignoring already discovered device");
 		return NULL;
 	}
 
 	dev = find_device(ctx->devs, &tmp);
 
 	if (dev) {
-		log_dbg(ctx, "Using existing device instance.");
+		log_dbg(ctx, "Using existing device instance");
 		return jaylink_ref_device(dev);
 	}
 
-	log_dbg(ctx, "Allocating new device instance.");
+	log_dbg(ctx, "Allocating new device instance");
 
 	dev = device_allocate(ctx);
 
 	if (!dev) {
-		log_warn(ctx, "Device instance malloc failed.");
+		log_warn(ctx, "Device instance malloc failed");
 		return NULL;
 	}
 
@@ -243,7 +243,7 @@ JAYLINK_PRIV int discovery_tcp_scan(struct jaylink_context *ctx)
 	sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
 	if (sock < 0) {
-		log_err(ctx, "Failed to create discovery socket.");
+		log_err(ctx, "Failed to create discovery socket");
 		return JAYLINK_ERR;
 	}
 
@@ -252,7 +252,7 @@ JAYLINK_PRIV int discovery_tcp_scan(struct jaylink_context *ctx)
 	if (!socket_set_option(sock, SOL_SOCKET, SO_BROADCAST, &opt_value,
 			sizeof(opt_value))) {
 		log_err(ctx, "Failed to enable broadcast option for discovery "
-			"socket.");
+			"socket");
 		socket_close(sock);
 		return JAYLINK_ERR;
 	}
@@ -264,7 +264,7 @@ JAYLINK_PRIV int discovery_tcp_scan(struct jaylink_context *ctx)
 
 	if (!socket_bind(sock, (struct sockaddr *)&addr,
 			sizeof(struct sockaddr_in))) {
-		log_err(ctx, "Failed to bind discovery socket.");
+		log_err(ctx, "Failed to bind discovery socket");
 		socket_close(sock);
 		return JAYLINK_ERR;
 	}
@@ -276,19 +276,19 @@ JAYLINK_PRIV int discovery_tcp_scan(struct jaylink_context *ctx)
 	memset(buf, 0, DISC_MESSAGE_SIZE);
 	memcpy(buf, "Discover", 8);
 
-	log_dbg(ctx, "Sending discovery message.");
+	log_dbg(ctx, "Sending discovery message");
 
 	length = DISC_MESSAGE_SIZE;
 
 	if (!socket_sendto(sock, (char *)buf, &length, 0,
 			(const struct sockaddr *)&addr, sizeof(addr))) {
-		log_err(ctx, "Failed to send discovery message.");
+		log_err(ctx, "Failed to send discovery message");
 		socket_close(sock);
 		return JAYLINK_ERR_IO;
 	}
 
 	if (length < DISC_MESSAGE_SIZE) {
-		log_err(ctx, "Only sent %zu bytes of discovery message.",
+		log_err(ctx, "Only sent %zu bytes of discovery message",
 			length);
 		socket_close(sock);
 		return JAYLINK_ERR_IO;
@@ -317,7 +317,7 @@ JAYLINK_PRIV int discovery_tcp_scan(struct jaylink_context *ctx)
 		if (!socket_recvfrom(sock, buf, &length, 0,
 				(struct sockaddr *)&addr, &addr_length)) {
 			log_warn(ctx, "Failed to receive advertisement "
-				"message.");
+				"message");
 			continue;
 		}
 
@@ -340,11 +340,11 @@ JAYLINK_PRIV int discovery_tcp_scan(struct jaylink_context *ctx)
 	socket_close(sock);
 
 	if (ret < 0) {
-		log_err(ctx, "select() failed.");
+		log_err(ctx, "select() failed");
 		return JAYLINK_ERR;
 	}
 
-	log_dbg(ctx, "Found %zu TCP/IP device(s).", num_devs);
+	log_dbg(ctx, "Found %zu TCP/IP device(s)", num_devs);
 
 	return JAYLINK_OK;
 }

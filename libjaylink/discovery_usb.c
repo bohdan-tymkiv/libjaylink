@@ -147,7 +147,7 @@ static struct jaylink_device *probe_device(struct jaylink_context *ctx,
 	ret = libusb_get_device_descriptor(usb_dev, &desc);
 
 	if (ret != LIBUSB_SUCCESS) {
-		log_warn(ctx, "Failed to get device descriptor: %s.",
+		log_warn(ctx, "Failed to get device descriptor: %s",
 			libusb_error_name(ret));
 		return NULL;
 	}
@@ -169,7 +169,7 @@ static struct jaylink_device *probe_device(struct jaylink_context *ctx,
 		return NULL;
 
 	log_dbg(ctx, "Found device (VID:PID = %04x:%04x, bus:address = "
-		"%03u:%03u).", desc.idVendor, desc.idProduct,
+		"%03u:%03u)", desc.idVendor, desc.idProduct,
 		libusb_get_bus_number(usb_dev),
 		libusb_get_device_address(usb_dev));
 
@@ -180,15 +180,15 @@ static struct jaylink_device *probe_device(struct jaylink_context *ctx,
 	dev = find_device(ctx, usb_dev);
 
 	if (dev) {
-		log_dbg(ctx, "Device: USB address = %u.", dev->usb_address);
+		log_dbg(ctx, "Device: USB address = %u", dev->usb_address);
 
 		if (dev->has_serial_number)
-			log_dbg(ctx, "Device: Serial number = %u.",
+			log_dbg(ctx, "Device: Serial number = %u",
 				dev->serial_number);
 		else
-			log_dbg(ctx, "Device: Serial number = N/A.");
+			log_dbg(ctx, "Device: Serial number = N/A");
 
-		log_dbg(ctx, "Using existing device instance.");
+		log_dbg(ctx, "Using existing device instance");
 		return jaylink_ref_device(dev);
 	}
 
@@ -196,7 +196,7 @@ static struct jaylink_device *probe_device(struct jaylink_context *ctx,
 	ret = libusb_open(usb_dev, &usb_devh);
 
 	if (ret != LIBUSB_SUCCESS) {
-		log_warn(ctx, "Failed to open device: %s.",
+		log_warn(ctx, "Failed to open device: %s",
 			libusb_error_name(ret));
 		return NULL;
 	}
@@ -210,31 +210,31 @@ static struct jaylink_device *probe_device(struct jaylink_context *ctx,
 	libusb_close(usb_devh);
 
 	if (ret < 0) {
-		log_warn(ctx, "Failed to retrieve serial number: %s.",
+		log_warn(ctx, "Failed to retrieve serial number: %s",
 			libusb_error_name(ret));
 		has_serial_number = false;
 	}
 
 	if (has_serial_number) {
 		if (!parse_serial_number(buf, &serial_number)) {
-			log_warn(ctx, "Failed to parse serial number.");
+			log_warn(ctx, "Failed to parse serial number");
 			return NULL;
 		}
 	}
 
-	log_dbg(ctx, "Device: USB address = %u.", usb_address);
+	log_dbg(ctx, "Device: USB address = %u", usb_address);
 
 	if (has_serial_number)
-		log_dbg(ctx, "Device: Serial number = %u.", serial_number);
+		log_dbg(ctx, "Device: Serial number = %u", serial_number);
 	else
-		log_dbg(ctx, "Device: Serial number = N/A.");
+		log_dbg(ctx, "Device: Serial number = N/A");
 
-	log_dbg(ctx, "Allocating new device instance.");
+	log_dbg(ctx, "Allocating new device instance");
 
 	dev = device_allocate(ctx);
 
 	if (!dev) {
-		log_warn(ctx, "Device instance malloc failed.");
+		log_warn(ctx, "Device instance malloc failed");
 		return NULL;
 	}
 
@@ -258,10 +258,10 @@ JAYLINK_PRIV int discovery_usb_scan(struct jaylink_context *ctx)
 
 	if (ret == LIBUSB_ERROR_IO) {
 		log_err(ctx, "Failed to retrieve device list: input/output "
-			"error.");
+			"error");
 		return JAYLINK_ERR_IO;
 	} else if (ret < 0) {
-		log_err(ctx, "Failed to retrieve device list: %s.",
+		log_err(ctx, "Failed to retrieve device list: %s",
 			libusb_error_name(ret));
 		return JAYLINK_ERR;
 	}
@@ -279,7 +279,7 @@ JAYLINK_PRIV int discovery_usb_scan(struct jaylink_context *ctx)
 	}
 
 	libusb_free_device_list(devs, true);
-	log_dbg(ctx, "Found %zu USB device(s).", num);
+	log_dbg(ctx, "Found %zu USB device(s)", num);
 
 	return JAYLINK_OK;
 }

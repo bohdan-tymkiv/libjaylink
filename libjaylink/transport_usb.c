@@ -65,7 +65,7 @@ static int initialize_handle(struct jaylink_device_handle *devh)
 	ret = libusb_get_active_config_descriptor(devh->dev->usb_dev, &config);
 
 	if (ret != LIBUSB_SUCCESS) {
-		log_err(ctx, "Failed to get configuration descriptor: %s.",
+		log_err(ctx, "Failed to get configuration descriptor: %s",
 			libusb_error_name(ret));
 		return JAYLINK_ERR;
 	}
@@ -91,7 +91,7 @@ static int initialize_handle(struct jaylink_device_handle *devh)
 	}
 
 	if (!found_interface) {
-		log_err(ctx, "No suitable interface found.");
+		log_err(ctx, "No suitable interface found");
 		libusb_free_config_descriptor(config);
 		return JAYLINK_ERR;
 	}
@@ -114,16 +114,16 @@ static int initialize_handle(struct jaylink_device_handle *devh)
 	libusb_free_config_descriptor(config);
 
 	if (!found_endpoint_in) {
-		log_err(ctx, "Interface IN endpoint not found.");
+		log_err(ctx, "Interface IN endpoint not found");
 		return JAYLINK_ERR;
 	}
 
 	if (!found_endpoint_out) {
-		log_err(ctx, "Interface OUT endpoint not found.");
+		log_err(ctx, "Interface OUT endpoint not found");
 		return JAYLINK_ERR;
 	}
 
-	log_dbg(ctx, "Using endpoint %02x (IN) and %02x (OUT).",
+	log_dbg(ctx, "Using endpoint %02x (IN) and %02x (OUT)",
 		devh->endpoint_in, devh->endpoint_out);
 
 	/* Buffer size must be a multiple of CHUNK_SIZE bytes. */
@@ -131,7 +131,7 @@ static int initialize_handle(struct jaylink_device_handle *devh)
 	devh->buffer = malloc(devh->buffer_size);
 
 	if (!devh->buffer) {
-		log_err(ctx, "Transport buffer malloc failed.");
+		log_err(ctx, "Transport buffer malloc failed");
 		return JAYLINK_ERR_MALLOC;
 	}
 
@@ -160,21 +160,21 @@ JAYLINK_PRIV int transport_usb_open(struct jaylink_device_handle *devh)
 	dev = devh->dev;
 	ctx = dev->ctx;
 
-	log_dbg(ctx, "Trying to open device (bus:address = %03u:%03u).",
+	log_dbg(ctx, "Trying to open device (bus:address = %03u:%03u)",
 		libusb_get_bus_number(dev->usb_dev),
 		libusb_get_device_address(dev->usb_dev));
 
 	ret = initialize_handle(devh);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "Initialize device handle failed.");
+		log_err(ctx, "Initialize device handle failed");
 		return ret;
 	}
 
 	ret = libusb_open(dev->usb_dev, &usb_devh);
 
 	if (ret != LIBUSB_SUCCESS) {
-		log_err(ctx, "Failed to open device: %s.",
+		log_err(ctx, "Failed to open device: %s",
 			libusb_error_name(ret));
 		cleanup_handle(devh);
 		return JAYLINK_ERR;
@@ -183,14 +183,14 @@ JAYLINK_PRIV int transport_usb_open(struct jaylink_device_handle *devh)
 	ret = libusb_claim_interface(usb_devh, devh->interface_number);
 
 	if (ret != LIBUSB_SUCCESS) {
-		log_err(ctx, "Failed to claim interface: %s.",
+		log_err(ctx, "Failed to claim interface: %s",
 			libusb_error_name(ret));
 		cleanup_handle(devh);
 		libusb_close(usb_devh);
 		return JAYLINK_ERR;
 	}
 
-	log_dbg(ctx, "Device opened successfully.");
+	log_dbg(ctx, "Device opened successfully");
 
 	devh->usb_devh = usb_devh;
 
@@ -206,7 +206,7 @@ JAYLINK_PRIV int transport_usb_close(struct jaylink_device_handle *devh)
 	dev = devh->dev;
 	ctx = dev->ctx;
 
-	log_dbg(ctx, "Closing device (bus:address = %03u:%03u).",
+	log_dbg(ctx, "Closing device (bus:address = %03u:%03u)",
 		libusb_get_bus_number(dev->usb_dev),
 		libusb_get_device_address(dev->usb_dev));
 
@@ -216,12 +216,12 @@ JAYLINK_PRIV int transport_usb_close(struct jaylink_device_handle *devh)
 	cleanup_handle(devh);
 
 	if (ret != LIBUSB_SUCCESS) {
-		log_err(ctx, "Failed to release interface: %s.",
+		log_err(ctx, "Failed to release interface: %s",
 			libusb_error_name(ret));
 		return JAYLINK_ERR;
 	}
 
-	log_dbg(ctx, "Device closed successfully.");
+	log_dbg(ctx, "Device closed successfully");
 
 	return JAYLINK_OK;
 }
@@ -238,14 +238,14 @@ JAYLINK_PRIV int transport_usb_start_write(struct jaylink_device_handle *devh,
 
 	ctx = devh->dev->ctx;
 
-	log_dbgio(ctx, "Starting write operation (length = %zu bytes).", length);
+	log_dbgio(ctx, "Starting write operation (length = %zu bytes)", length);
 
 	if (devh->write_pos > 0)
 		log_warn(ctx, "Last write operation left %zu bytes in the "
-			"buffer.", devh->write_pos);
+			"buffer", devh->write_pos);
 
 	if (devh->write_length > 0)
-		log_warn(ctx, "Last write operation was not performed.");
+		log_warn(ctx, "Last write operation was not performed");
 
 	devh->write_length = length;
 	devh->write_pos = 0;
@@ -263,15 +263,15 @@ JAYLINK_PRIV int transport_usb_start_read(struct jaylink_device_handle *devh,
 
 	ctx = devh->dev->ctx;
 
-	log_dbgio(ctx, "Starting read operation (length = %zu bytes).",
+	log_dbgio(ctx, "Starting read operation (length = %zu bytes)",
 		length);
 
 	if (devh->bytes_available > 0)
 		log_dbg(ctx, "Last read operation left %zu bytes in the "
-			"buffer.", devh->bytes_available);
+			"buffer", devh->bytes_available);
 
 	if (devh->read_length > 0)
-		log_warn(ctx, "Last read operation left %zu bytes.",
+		log_warn(ctx, "Last read operation left %zu bytes",
 			devh->read_length);
 
 	devh->read_length = length;
@@ -293,21 +293,21 @@ JAYLINK_PRIV int transport_usb_start_write_read(
 	ctx = devh->dev->ctx;
 
 	log_dbgio(ctx, "Starting write / read operation (length = "
-		"%zu / %zu bytes).", write_length, read_length);
+		"%zu / %zu bytes)", write_length, read_length);
 
 	if (devh->write_pos > 0)
 		log_warn(ctx, "Last write operation left %zu bytes in the "
-			"buffer.", devh->write_pos);
+			"buffer", devh->write_pos);
 
 	if (devh->write_length > 0)
-		log_warn(ctx, "Last write operation was not performed.");
+		log_warn(ctx, "Last write operation was not performed");
 
 	if (devh->bytes_available > 0)
 		log_warn(ctx, "Last read operation left %zu bytes in the "
-			"buffer.", devh->bytes_available);
+			"buffer", devh->bytes_available);
 
 	if (devh->read_length > 0)
-		log_warn(ctx, "Last read operation left %zu bytes.",
+		log_warn(ctx, "Last read operation left %zu bytes",
 			devh->read_length);
 
 	devh->write_length = write_length;
@@ -341,16 +341,16 @@ static int usb_recv(struct jaylink_device_handle *devh, uint8_t *buffer,
 
 		if (ret == LIBUSB_ERROR_TIMEOUT) {
 			log_warn(ctx, "Failed to receive data from "
-				"device: %s.", libusb_error_name(ret));
+				"device: %s", libusb_error_name(ret));
 			tries--;
 			continue;
 		} else if (ret != LIBUSB_SUCCESS) {
 			log_err(ctx, "Failed to receive data from "
-				"device: %s.", libusb_error_name(ret));
+				"device: %s", libusb_error_name(ret));
 			return JAYLINK_ERR;
 		}
 
-		log_dbgio(ctx, "Received %i bytes from device.", transferred);
+		log_dbgio(ctx, "Received %i bytes from device", transferred);
 	}
 
 	/* Ignore a possible timeout if at least one byte was received. */
@@ -359,7 +359,7 @@ static int usb_recv(struct jaylink_device_handle *devh, uint8_t *buffer,
 		return JAYLINK_OK;
 	}
 
-	log_err(ctx, "Receiving data from device timed out.");
+	log_err(ctx, "Receiving data from device timed out");
 
 	return JAYLINK_ERR_TIMEOUT;
 }
@@ -382,7 +382,7 @@ static bool adjust_buffer(struct jaylink_device_handle *devh, size_t size)
 	buffer = realloc(devh->buffer, size);
 
 	if (!buffer) {
-		log_err(ctx, "Failed to adjust buffer size to %zu bytes.",
+		log_err(ctx, "Failed to adjust buffer size to %zu bytes",
 			size);
 		return false;
 	}
@@ -390,7 +390,7 @@ static bool adjust_buffer(struct jaylink_device_handle *devh, size_t size)
 	devh->buffer = buffer;
 	devh->buffer_size = size;
 
-	log_dbg(ctx, "Adjusted buffer size to %zu bytes.", size);
+	log_dbg(ctx, "Adjusted buffer size to %zu bytes", size);
 
 	return true;
 }
@@ -415,11 +415,11 @@ static int usb_send(struct jaylink_device_handle *devh, const uint8_t *buffer,
 		if (ret == LIBUSB_SUCCESS) {
 			tries = NUM_TIMEOUTS;
 		} else if (ret == LIBUSB_ERROR_TIMEOUT) {
-			log_warn(ctx, "Failed to send data to device: %s.",
+			log_warn(ctx, "Failed to send data to device: %s",
 				libusb_error_name(ret));
 			tries--;
 		} else {
-			log_err(ctx, "Failed to send data to device: %s.",
+			log_err(ctx, "Failed to send data to device: %s",
 				libusb_error_name(ret));
 			return JAYLINK_ERR;
 		}
@@ -427,13 +427,13 @@ static int usb_send(struct jaylink_device_handle *devh, const uint8_t *buffer,
 		buffer += transferred;
 		length -= transferred;
 
-		log_dbgio(ctx, "Sent %i bytes to device.", transferred);
+		log_dbgio(ctx, "Sent %i bytes to device", transferred);
 	}
 
 	if (!length)
 		return JAYLINK_OK;
 
-	log_err(ctx, "Sending data to device timed out.");
+	log_err(ctx, "Sending data to device timed out");
 
 	return JAYLINK_ERR_TIMEOUT;
 }
@@ -451,7 +451,7 @@ JAYLINK_PRIV int transport_usb_write(struct jaylink_device_handle *devh,
 
 	if (length > devh->write_length) {
 		log_err(ctx, "Requested to write %zu bytes but only %zu bytes "
-			"are expected for the write operation.", length,
+			"are expected for the write operation", length,
 			devh->write_length);
 		return JAYLINK_ERR_ARG;
 	}
@@ -471,7 +471,7 @@ JAYLINK_PRIV int transport_usb_write(struct jaylink_device_handle *devh,
 		devh->write_length -= length;
 		devh->write_pos += length;
 
-		log_dbgio(ctx, "Wrote %zu bytes into buffer.", length);
+		log_dbgio(ctx, "Wrote %zu bytes into buffer", length);
 		return JAYLINK_OK;
 	}
 
@@ -506,7 +506,7 @@ JAYLINK_PRIV int transport_usb_write(struct jaylink_device_handle *devh,
 		length -= tmp;
 		buffer += tmp;
 
-		log_dbgio(ctx, "Buffer filled up with %zu bytes.", tmp);
+		log_dbgio(ctx, "Buffer filled up with %zu bytes", tmp);
 	}
 
 	/* Send buffered data to the device. */
@@ -535,7 +535,7 @@ JAYLINK_PRIV int transport_usb_read(struct jaylink_device_handle *devh,
 
 	if (length > devh->read_length) {
 		log_err(ctx, "Requested to read %zu bytes but only %zu bytes "
-			"are expected for the read operation.", length,
+			"are expected for the read operation", length,
 			devh->read_length);
 		return JAYLINK_ERR_ARG;
 	}
@@ -547,7 +547,7 @@ JAYLINK_PRIV int transport_usb_read(struct jaylink_device_handle *devh,
 		devh->bytes_available -= length;
 		devh->read_pos += length;
 
-		log_dbgio(ctx, "Read %zu bytes from buffer.", length);
+		log_dbgio(ctx, "Read %zu bytes from buffer", length);
 		return JAYLINK_OK;
 	}
 
@@ -559,7 +559,7 @@ JAYLINK_PRIV int transport_usb_read(struct jaylink_device_handle *devh,
 		length -= devh->bytes_available;
 		devh->read_length -= devh->bytes_available;
 
-		log_dbgio(ctx, "Read %zu bytes from buffer to flush it.",
+		log_dbgio(ctx, "Read %zu bytes from buffer to flush it",
 			devh->bytes_available);
 
 		devh->bytes_available = 0;
@@ -599,7 +599,7 @@ JAYLINK_PRIV int transport_usb_read(struct jaylink_device_handle *devh,
 			length -= tmp;
 			devh->read_length -= tmp;
 
-			log_dbgio(ctx, "Read %zu bytes from buffer.", tmp);
+			log_dbgio(ctx, "Read %zu bytes from buffer", tmp);
 		} else {
 			ret = usb_recv(devh, buffer, &bytes_received);
 
@@ -610,7 +610,7 @@ JAYLINK_PRIV int transport_usb_read(struct jaylink_device_handle *devh,
 			length -= bytes_received;
 			devh->read_length -= bytes_received;
 
-			log_dbgio(ctx, "Read %zu bytes from device.",
+			log_dbgio(ctx, "Read %zu bytes from device",
 				bytes_received);
 		}
 	}

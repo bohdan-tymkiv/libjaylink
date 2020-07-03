@@ -60,7 +60,7 @@ JAYLINK_PRIV int transport_open(struct jaylink_device_handle *devh)
 		ret = transport_tcp_open(devh);
 		break;
 	default:
-		log_err(devh->dev->ctx, "BUG: Invalid host interface: %u.",
+		log_err(devh->dev->ctx, "BUG: Invalid host interface: %u",
 			devh->dev->iface);
 		return JAYLINK_ERR;
 	}
@@ -93,7 +93,7 @@ JAYLINK_PRIV int transport_close(struct jaylink_device_handle *devh)
 		ret = transport_tcp_close(devh);
 		break;
 	default:
-		log_err(devh->dev->ctx, "BUG: Invalid host interface: %u.",
+		log_err(devh->dev->ctx, "BUG: Invalid host interface: %u",
 			devh->dev->iface);
 		return JAYLINK_ERR;
 	}
@@ -131,7 +131,7 @@ JAYLINK_PRIV int transport_start_write(struct jaylink_device_handle *devh,
 		ret = transport_tcp_start_write(devh, length, has_command);
 		break;
 	default:
-		log_err(devh->dev->ctx, "BUG: Invalid host interface: %u.",
+		log_err(devh->dev->ctx, "BUG: Invalid host interface: %u",
 			devh->dev->iface);
 		return JAYLINK_ERR;
 	}
@@ -167,7 +167,7 @@ JAYLINK_PRIV int transport_start_read(struct jaylink_device_handle *devh,
 		ret = transport_tcp_start_read(devh, length);
 		break;
 	default:
-		log_err(devh->dev->ctx, "BUG: Invalid host interface: %u.",
+		log_err(devh->dev->ctx, "BUG: Invalid host interface: %u",
 			devh->dev->iface);
 		return JAYLINK_ERR;
 	}
@@ -212,7 +212,7 @@ JAYLINK_PRIV int transport_start_write_read(struct jaylink_device_handle *devh,
 			read_length, has_command);
 		break;
 	default:
-		log_err(devh->dev->ctx, "BUG: Invalid host interface: %u.",
+		log_err(devh->dev->ctx, "BUG: Invalid host interface: %u",
 			devh->dev->iface);
 		return JAYLINK_ERR;
 	}
@@ -258,7 +258,7 @@ JAYLINK_PRIV int transport_write(struct jaylink_device_handle *devh,
 		ret = transport_tcp_write(devh, buffer, length);
 		break;
 	default:
-		log_err(devh->dev->ctx, "BUG: Invalid host interface: %u.",
+		log_err(devh->dev->ctx, "BUG: Invalid host interface: %u",
 			devh->dev->iface);
 		return JAYLINK_ERR;
 	}
@@ -300,7 +300,7 @@ JAYLINK_PRIV int transport_read(struct jaylink_device_handle *devh,
 		ret = transport_tcp_read(devh, buffer, length);
 		break;
 	default:
-		log_err(devh->dev->ctx, "BUG: Invalid host interface: %u.",
+		log_err(devh->dev->ctx, "BUG: Invalid host interface: %u",
 			devh->dev->iface);
 		return JAYLINK_ERR;
 	}

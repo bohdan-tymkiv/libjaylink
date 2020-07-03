@@ -105,7 +105,7 @@ JAYLINK_API int jaylink_emucom_read(struct jaylink_device_handle *devh,
 	ret = transport_start_write_read(devh, 10, 4, true);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_write_read() failed: %s.",
+		log_err(ctx, "transport_start_write_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -119,7 +119,7 @@ JAYLINK_API int jaylink_emucom_read(struct jaylink_device_handle *devh,
 	ret = transport_write(devh, buf, 10);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_write() failed: %s.",
+		log_err(ctx, "transport_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -127,7 +127,7 @@ JAYLINK_API int jaylink_emucom_read(struct jaylink_device_handle *devh,
 	ret = transport_read(devh, buf, 4);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_read() failed: %s.",
+		log_err(ctx, "transport_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -143,14 +143,14 @@ JAYLINK_API int jaylink_emucom_read(struct jaylink_device_handle *devh,
 	}
 
 	if (tmp & EMUCOM_ERR) {
-		log_err(ctx, "Failed to read from channel 0x%x: 0x%x.",
+		log_err(ctx, "Failed to read from channel 0x%x: 0x%x",
 			channel, tmp);
 		return JAYLINK_ERR_DEV;
 	}
 
 	if (tmp > *length) {
 		log_err(ctx, "Requested at most %u bytes but device "
-			"returned %u bytes.", *length, tmp);
+			"returned %u bytes", *length, tmp);
 		return JAYLINK_ERR_PROTO;
 	}
 
@@ -162,7 +162,7 @@ JAYLINK_API int jaylink_emucom_read(struct jaylink_device_handle *devh,
 	ret = transport_start_read(devh, tmp);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_read() failed: %s.",
+		log_err(ctx, "transport_start_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -170,7 +170,7 @@ JAYLINK_API int jaylink_emucom_read(struct jaylink_device_handle *devh,
 	ret = transport_read(devh, buffer, tmp);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_read() failed: %s.",
+		log_err(ctx, "transport_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -221,7 +221,7 @@ JAYLINK_API int jaylink_emucom_write(struct jaylink_device_handle *devh,
 	ret = transport_start_write(devh, 10, true);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_write() failed: %s.",
+		log_err(ctx, "transport_start_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -235,7 +235,7 @@ JAYLINK_API int jaylink_emucom_write(struct jaylink_device_handle *devh,
 	ret = transport_write(devh, buf, 10);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_write() failed: %s.",
+		log_err(ctx, "transport_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -243,7 +243,7 @@ JAYLINK_API int jaylink_emucom_write(struct jaylink_device_handle *devh,
 	ret = transport_start_write_read(devh, *length, 4, false);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_write_read() failed: %s.",
+		log_err(ctx, "transport_start_write_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -251,7 +251,7 @@ JAYLINK_API int jaylink_emucom_write(struct jaylink_device_handle *devh,
 	ret = transport_write(devh, buffer, *length);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_write() failed: %s.",
+		log_err(ctx, "transport_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -259,7 +259,7 @@ JAYLINK_API int jaylink_emucom_write(struct jaylink_device_handle *devh,
 	ret = transport_read(devh, buf, 4);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_read() failed: %s.",
+		log_err(ctx, "transport_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -270,14 +270,14 @@ JAYLINK_API int jaylink_emucom_write(struct jaylink_device_handle *devh,
 		return JAYLINK_ERR_DEV_NOT_SUPPORTED;
 
 	if (tmp & EMUCOM_ERR) {
-		log_err(ctx, "Failed to write to channel 0x%x: 0x%x.",
+		log_err(ctx, "Failed to write to channel 0x%x: 0x%x",
 			channel, tmp);
 		return JAYLINK_ERR_DEV;
 	}
 
 	if (tmp > *length) {
 		log_err(ctx, "Only %u bytes were supposed to be written, but "
-			"the device reported %u written bytes.", *length, tmp);
+			"the device reported %u written bytes", *length, tmp);
 		return JAYLINK_ERR_PROTO;
 	}
 

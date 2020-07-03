@@ -82,7 +82,7 @@ static int initialize_handle(struct jaylink_device_handle *devh)
 	devh->buffer = malloc(devh->buffer_size);
 
 	if (!devh->buffer) {
-		log_err(ctx, "Transport buffer malloc failed.");
+		log_err(ctx, "Transport buffer malloc failed");
 		return JAYLINK_ERR_MALLOC;
 	}
 
@@ -113,18 +113,18 @@ static int _recv(struct jaylink_device_handle *devh, uint8_t *buffer,
 		tmp = length;
 
 		if (!socket_recv(devh->sock, buffer, &tmp, 0)) {
-			log_err(ctx, "Failed to receive data from device.");
+			log_err(ctx, "Failed to receive data from device");
 			return JAYLINK_ERR_IO;
 		} else if (!tmp) {
 			log_err(ctx, "Failed to receive data from device: "
-				"remote connection closed.");
+				"remote connection closed");
 			return JAYLINK_ERR_IO;
 		}
 
 		buffer += tmp;
 		length -= tmp;
 
-		log_dbgio(ctx, "Received %zu bytes from device.", tmp);
+		log_dbgio(ctx, "Received %zu bytes from device", tmp);
 	}
 
 	return JAYLINK_OK;
@@ -144,35 +144,35 @@ static int handle_server_hello(struct jaylink_device_handle *devh)
 	ret = _recv(devh, buf, sizeof(buf));
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "Failed to receive hello message.");
+		log_err(ctx, "Failed to receive hello message");
 		return ret;
 	}
 
 	if (buf[0] == RESP_MAX_CONNECTIONS) {
-		log_err(ctx, "Maximum number of connections reached.");
+		log_err(ctx, "Maximum number of connections reached");
 		return JAYLINK_ERR;
 	}
 
 	if (buf[0] != CMD_SERVER) {
-		log_err(ctx, "Invalid hello message received.");
+		log_err(ctx, "Invalid hello message received");
 		return JAYLINK_ERR_PROTO;
 	}
 
 	proto_version = buffer_get_u16(buf, 1);
 
-	log_dbg(ctx, "Protocol version: 0x%04x.", proto_version);
+	log_dbg(ctx, "Protocol version: 0x%04x", proto_version);
 
 	length = buf[3];
 	ret = _recv(devh, (uint8_t *)name, length);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "Failed to receive server name.");
+		log_err(ctx, "Failed to receive server name");
 		return ret;
 	}
 
 	name[length] = '\0';
 
-	log_dbg(ctx, "Server name: %s.", name);
+	log_dbg(ctx, "Server name: %s", name);
 
 	return JAYLINK_OK;
 }
@@ -189,7 +189,7 @@ static int set_socket_timeouts(struct jaylink_device_handle *devh)
 
 	if (!socket_set_option(devh->sock, SOL_SOCKET, SO_RCVTIMEO, &timeout,
 			sizeof(timeout))) {
-		log_err(ctx, "Failed to set socket receive timeout.");
+		log_err(ctx, "Failed to set socket receive timeout");
 		return JAYLINK_ERR;
 	}
 
@@ -197,7 +197,7 @@ static int set_socket_timeouts(struct jaylink_device_handle *devh)
 
 	if (!socket_set_option(devh->sock, SOL_SOCKET, SO_SNDTIMEO, &timeout,
 			sizeof(timeout))) {
-		log_err(ctx, "Failed to set socket send timeout.");
+		log_err(ctx, "Failed to set socket send timeout");
 		return JAYLINK_ERR;
 	}
 #else
@@ -208,7 +208,7 @@ static int set_socket_timeouts(struct jaylink_device_handle *devh)
 
 	if (!socket_set_option(devh->sock, SOL_SOCKET, SO_RCVTIMEO, &timeout,
 			sizeof(struct timeval))) {
-		log_err(ctx, "Failed to set socket receive timeout.");
+		log_err(ctx, "Failed to set socket receive timeout");
 		return JAYLINK_ERR;
 	}
 
@@ -217,7 +217,7 @@ static int set_socket_timeouts(struct jaylink_device_handle *devh)
 
 	if (!socket_set_option(devh->sock, SOL_SOCKET, SO_SNDTIMEO, &timeout,
 			sizeof(struct timeval))) {
-		log_err(ctx, "Failed to set socket send timeout.");
+		log_err(ctx, "Failed to set socket send timeout");
 		return JAYLINK_ERR;
 	}
 #endif
@@ -236,13 +236,13 @@ JAYLINK_PRIV int transport_tcp_open(struct jaylink_device_handle *devh)
 	dev = devh->dev;
 	ctx = dev->ctx;
 
-	log_dbg(ctx, "Trying to open device (IPv4 address = %s).",
+	log_dbg(ctx, "Trying to open device (IPv4 address = %s)",
 		dev->ipv4_address);
 
 	ret = initialize_handle(devh);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "Initialize device handle failed.");
+		log_err(ctx, "Initialize device handle failed");
 		return ret;
 	}
 
@@ -254,7 +254,7 @@ JAYLINK_PRIV int transport_tcp_open(struct jaylink_device_handle *devh)
 	ret = getaddrinfo(dev->ipv4_address, PORT_STRING, &hints, &info);
 
 	if (ret != 0) {
-		log_err(ctx, "Address lookup failed.");
+		log_err(ctx, "Address lookup failed");
 		cleanup_handle(devh);
 		return JAYLINK_ERR;
 	}
@@ -277,12 +277,12 @@ JAYLINK_PRIV int transport_tcp_open(struct jaylink_device_handle *devh)
 	freeaddrinfo(info);
 
 	if (sock < 0) {
-		log_err(ctx, "Failed to open device.");
+		log_err(ctx, "Failed to open device");
 		cleanup_handle(devh);
 		return JAYLINK_ERR;
 	}
 
-	log_dbg(ctx, "Device opened successfully.");
+	log_dbg(ctx, "Device opened successfully");
 
 	devh->sock = sock;
 	ret = set_socket_timeouts(devh);
@@ -310,12 +310,12 @@ JAYLINK_PRIV int transport_tcp_close(struct jaylink_device_handle *devh)
 
 	ctx = devh->dev->ctx;
 
-	log_dbg(ctx, "Closing device (IPv4 address = %s).",
+	log_dbg(ctx, "Closing device (IPv4 address = %s)",
 		devh->dev->ipv4_address);
 
 	cleanup_handle(devh);
 
-	log_dbg(ctx, "Device closed successfully.");
+	log_dbg(ctx, "Device closed successfully");
 
 	return JAYLINK_OK;
 }
@@ -330,15 +330,15 @@ JAYLINK_PRIV int transport_tcp_start_write(struct jaylink_device_handle *devh,
 
 	ctx = devh->dev->ctx;
 
-	log_dbgio(ctx, "Starting write operation (length = %zu bytes).",
+	log_dbgio(ctx, "Starting write operation (length = %zu bytes)",
 		length);
 
 	if (devh->write_pos > 0)
 		log_warn(ctx, "Last write operation left %zu bytes in the "
-			"buffer.", devh->write_pos);
+			"buffer", devh->write_pos);
 
 	if (devh->write_length > 0)
-		log_warn(ctx, "Last write operation was not performed.");
+		log_warn(ctx, "Last write operation was not performed");
 
 	devh->write_length = length;
 	devh->write_pos = 0;
@@ -361,15 +361,15 @@ JAYLINK_PRIV int transport_tcp_start_read(struct jaylink_device_handle *devh,
 
 	ctx = devh->dev->ctx;
 
-	log_dbgio(ctx, "Starting read operation (length = %zu bytes).",
+	log_dbgio(ctx, "Starting read operation (length = %zu bytes)",
 		length);
 
 	if (devh->bytes_available > 0)
 		log_dbg(ctx, "Last read operation left %zu bytes in the "
-			"buffer.", devh->bytes_available);
+			"buffer", devh->bytes_available);
 
 	if (devh->read_length > 0)
-		log_warn(ctx, "Last read operation left %zu bytes.",
+		log_warn(ctx, "Last read operation left %zu bytes",
 			devh->read_length);
 
 	devh->read_length = length;
@@ -389,21 +389,21 @@ JAYLINK_PRIV int transport_tcp_start_write_read(
 	ctx = devh->dev->ctx;
 
 	log_dbgio(ctx, "Starting write / read operation (length = "
-		"%zu / %zu bytes).", write_length, read_length);
+		"%zu / %zu bytes)", write_length, read_length);
 
 	if (devh->write_pos > 0)
 		log_warn(ctx, "Last write operation left %zu bytes in the "
-			"buffer.", devh->write_pos);
+			"buffer", devh->write_pos);
 
 	if (devh->write_length > 0)
-		log_warn(ctx, "Last write operation was not performed.");
+		log_warn(ctx, "Last write operation was not performed");
 
 	if (devh->bytes_available > 0)
 		log_warn(ctx, "Last read operation left %zu bytes in the "
-			"buffer.", devh->bytes_available);
+			"buffer", devh->bytes_available);
 
 	if (devh->read_length > 0)
-		log_warn(ctx, "Last read operation left %zu bytes.",
+		log_warn(ctx, "Last read operation left %zu bytes",
 			devh->read_length);
 
 	devh->write_length = write_length;
@@ -433,14 +433,14 @@ static int _send(struct jaylink_device_handle *devh, const uint8_t *buffer,
 		tmp = length;
 
 		if (!socket_send(devh->sock, buffer, &tmp, 0)) {
-			log_err(ctx, "Failed to send data to device.");
+			log_err(ctx, "Failed to send data to device");
 			return JAYLINK_ERR_IO;
 		}
 
 		buffer += tmp;
 		length -= tmp;
 
-		log_dbgio(ctx, "Sent %zu bytes to device.", tmp);
+		log_dbgio(ctx, "Sent %zu bytes to device", tmp);
 	}
 
 	return JAYLINK_OK;
@@ -464,7 +464,7 @@ static bool adjust_buffer(struct jaylink_device_handle *devh, size_t size)
 	buffer = realloc(devh->buffer, size);
 
 	if (!buffer) {
-		log_err(ctx, "Failed to adjust buffer size to %zu bytes.",
+		log_err(ctx, "Failed to adjust buffer size to %zu bytes",
 			size);
 		return false;
 	}
@@ -472,7 +472,7 @@ static bool adjust_buffer(struct jaylink_device_handle *devh, size_t size)
 	devh->buffer = buffer;
 	devh->buffer_size = size;
 
-	log_dbg(ctx, "Adjusted buffer size to %zu bytes.", size);
+	log_dbg(ctx, "Adjusted buffer size to %zu bytes", size);
 
 	return true;
 }
@@ -488,7 +488,7 @@ JAYLINK_PRIV int transport_tcp_write(struct jaylink_device_handle *devh,
 
 	if (length > devh->write_length) {
 		log_err(ctx, "Requested to write %zu bytes but only %zu bytes "
-			"are expected for the write operation.", length,
+			"are expected for the write operation", length,
 			devh->write_length);
 		return JAYLINK_ERR_ARG;
 	}
@@ -508,7 +508,7 @@ JAYLINK_PRIV int transport_tcp_write(struct jaylink_device_handle *devh,
 		devh->write_length -= length;
 		devh->write_pos += length;
 
-		log_dbgio(ctx, "Wrote %zu bytes into buffer.", length);
+		log_dbgio(ctx, "Wrote %zu bytes into buffer", length);
 		return JAYLINK_OK;
 	}
 
@@ -533,7 +533,7 @@ JAYLINK_PRIV int transport_tcp_write(struct jaylink_device_handle *devh,
 	length -= tmp;
 	buffer += tmp;
 
-	log_dbgio(ctx, "Buffer filled up with %zu bytes.", tmp);
+	log_dbgio(ctx, "Buffer filled up with %zu bytes", tmp);
 
 	ret = _send(devh, devh->buffer, devh->write_pos + tmp);
 
@@ -558,7 +558,7 @@ JAYLINK_PRIV int transport_tcp_read(struct jaylink_device_handle *devh,
 
 	if (length > devh->read_length) {
 		log_err(ctx, "Requested to read %zu bytes but only %zu bytes "
-			"are expected for the read operation.", length,
+			"are expected for the read operation", length,
 			devh->read_length);
 		return JAYLINK_ERR_ARG;
 	}
@@ -570,7 +570,7 @@ JAYLINK_PRIV int transport_tcp_read(struct jaylink_device_handle *devh,
 		devh->bytes_available -= length;
 		devh->read_pos += length;
 
-		log_dbgio(ctx, "Read %zu bytes from buffer.", length);
+		log_dbgio(ctx, "Read %zu bytes from buffer", length);
 		return JAYLINK_OK;
 	}
 
@@ -582,7 +582,7 @@ JAYLINK_PRIV int transport_tcp_read(struct jaylink_device_handle *devh,
 		length -= devh->bytes_available;
 		devh->read_length -= devh->bytes_available;
 
-		log_dbgio(ctx, "Read %zu bytes from buffer to flush it.",
+		log_dbgio(ctx, "Read %zu bytes from buffer to flush it",
 			devh->bytes_available);
 
 		devh->bytes_available = 0;

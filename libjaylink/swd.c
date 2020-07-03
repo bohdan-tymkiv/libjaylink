@@ -88,7 +88,7 @@ JAYLINK_API int jaylink_swd_io(struct jaylink_device_handle *devh,
 		num_bytes + 1, true);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_write_read() failed: %s.",
+		log_err(ctx, "transport_start_write_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -100,7 +100,7 @@ JAYLINK_API int jaylink_swd_io(struct jaylink_device_handle *devh,
 	ret = transport_write(devh, buf, 4);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_write() failed: %s.",
+		log_err(ctx, "transport_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -108,7 +108,7 @@ JAYLINK_API int jaylink_swd_io(struct jaylink_device_handle *devh,
 	ret = transport_write(devh, direction, num_bytes);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_write() failed: %s.",
+		log_err(ctx, "transport_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -116,7 +116,7 @@ JAYLINK_API int jaylink_swd_io(struct jaylink_device_handle *devh,
 	ret = transport_write(devh, out, num_bytes);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_write() failed: %s.",
+		log_err(ctx, "transport_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -124,7 +124,7 @@ JAYLINK_API int jaylink_swd_io(struct jaylink_device_handle *devh,
 	ret = transport_read(devh, in, num_bytes);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_read() failed: %s.",
+		log_err(ctx, "transport_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -132,7 +132,7 @@ JAYLINK_API int jaylink_swd_io(struct jaylink_device_handle *devh,
 	ret = transport_read(devh, &status, 1);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_read() failed: %s.",
+		log_err(ctx, "transport_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -140,7 +140,7 @@ JAYLINK_API int jaylink_swd_io(struct jaylink_device_handle *devh,
 	if (status == SWD_IO_ERR_NO_MEMORY) {
 		return JAYLINK_ERR_DEV_NO_MEMORY;
 	} else if (status > 0) {
-		log_err(ctx, "SWD I/O operation failed: 0x%x.", status);
+		log_err(ctx, "SWD I/O operation failed: 0x%x", status);
 		return JAYLINK_ERR_DEV;
 	}
 

@@ -105,7 +105,7 @@ JAYLINK_API int jaylink_file_read(struct jaylink_device_handle *devh,
 	ret = transport_start_write(devh, 18 + filename_length, true);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_write() failed: %s.",
+		log_err(ctx, "transport_start_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -131,7 +131,7 @@ JAYLINK_API int jaylink_file_read(struct jaylink_device_handle *devh,
 	ret = transport_write(devh, buf, 18 + filename_length);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_write() failed: %s.",
+		log_err(ctx, "transport_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -139,7 +139,7 @@ JAYLINK_API int jaylink_file_read(struct jaylink_device_handle *devh,
 	ret = transport_start_read(devh, *length);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_read() failed: %s.",
+		log_err(ctx, "transport_start_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -147,7 +147,7 @@ JAYLINK_API int jaylink_file_read(struct jaylink_device_handle *devh,
 	ret = transport_read(devh, buffer, *length);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_read() failed: %s.",
+		log_err(ctx, "transport_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -155,7 +155,7 @@ JAYLINK_API int jaylink_file_read(struct jaylink_device_handle *devh,
 	ret = transport_start_read(devh, 4);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_read() failed: %s.",
+		log_err(ctx, "transport_start_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -163,7 +163,7 @@ JAYLINK_API int jaylink_file_read(struct jaylink_device_handle *devh,
 	ret = transport_read(devh, buf, 4);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_read() failed: %s.",
+		log_err(ctx, "transport_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -240,7 +240,7 @@ JAYLINK_API int jaylink_file_write(struct jaylink_device_handle *devh,
 	ret = transport_start_write(devh, 18 + filename_length, true);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_write() failed: %s.",
+		log_err(ctx, "transport_start_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -266,7 +266,7 @@ JAYLINK_API int jaylink_file_write(struct jaylink_device_handle *devh,
 	ret = transport_write(devh, buf, 18 + filename_length);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_write() failed: %s.",
+		log_err(ctx, "transport_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -274,7 +274,7 @@ JAYLINK_API int jaylink_file_write(struct jaylink_device_handle *devh,
 	ret = transport_start_write(devh, *length, true);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_write() failed: %s.",
+		log_err(ctx, "transport_start_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -282,7 +282,7 @@ JAYLINK_API int jaylink_file_write(struct jaylink_device_handle *devh,
 	ret = transport_write(devh, buffer, *length);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_write() failed: %s.",
+		log_err(ctx, "transport_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -290,7 +290,7 @@ JAYLINK_API int jaylink_file_write(struct jaylink_device_handle *devh,
 	ret = transport_start_read(devh, 4);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_read() failed: %s.",
+		log_err(ctx, "transport_start_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -298,7 +298,7 @@ JAYLINK_API int jaylink_file_write(struct jaylink_device_handle *devh,
 	ret = transport_read(devh, buf, 4);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_read() failed: %s.",
+		log_err(ctx, "transport_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -359,7 +359,7 @@ JAYLINK_API int jaylink_file_get_size(struct jaylink_device_handle *devh,
 	ret = transport_start_write(devh, 6 + length, true);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_write() failed: %s.",
+		log_err(ctx, "transport_start_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -377,7 +377,7 @@ JAYLINK_API int jaylink_file_get_size(struct jaylink_device_handle *devh,
 	ret = transport_write(devh, buf, 6 + length);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_write() failed: %s.",
+		log_err(ctx, "transport_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -385,7 +385,7 @@ JAYLINK_API int jaylink_file_get_size(struct jaylink_device_handle *devh,
 	ret = transport_start_read(devh, 4);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_read() failed: %s.",
+		log_err(ctx, "transport_start_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -393,7 +393,7 @@ JAYLINK_API int jaylink_file_get_size(struct jaylink_device_handle *devh,
 	ret = transport_read(devh, buf, 4);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_read() failed: %s.",
+		log_err(ctx, "transport_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -451,7 +451,7 @@ JAYLINK_API int jaylink_file_delete(struct jaylink_device_handle *devh,
 	ret = transport_start_write(devh, 6 + length, true);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_write() failed: %s.",
+		log_err(ctx, "transport_start_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -469,7 +469,7 @@ JAYLINK_API int jaylink_file_delete(struct jaylink_device_handle *devh,
 	ret = transport_write(devh, buf, 6 + length);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_write() failed: %s.",
+		log_err(ctx, "transport_write() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -477,7 +477,7 @@ JAYLINK_API int jaylink_file_delete(struct jaylink_device_handle *devh,
 	ret = transport_start_read(devh, 4);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_start_read() failed: %s.",
+		log_err(ctx, "transport_start_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
@@ -485,7 +485,7 @@ JAYLINK_API int jaylink_file_delete(struct jaylink_device_handle *devh,
 	ret = transport_read(devh, buf, 4);
 
 	if (ret != JAYLINK_OK) {
-		log_err(ctx, "transport_read() failed: %s.",
+		log_err(ctx, "transport_read() failed: %s",
 			jaylink_strerror(ret));
 		return ret;
 	}
