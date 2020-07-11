@@ -72,7 +72,7 @@ JAYLINK_SET_PACKAGE_VERSION([JAYLINK_VERSION_PACKAGE], [AC_PACKAGE_VERSION])
 # Libtool interface version of libjaylink. This is not the same as the package
 # version. For information about the versioning system of libtool, see:
 # http://www.gnu.org/software/libtool/manual/libtool.html#Libtool-versioning
-JAYLINK_SET_LIBRARY_VERSION([JAYLINK_VERSION_LIBRARY], [0:0:0])
+JAYLINK_SET_LIBRARY_VERSION([JAYLINK_VERSION_LIBRARY], [1:0:1])
 
 AC_ARG_ENABLE([subproject-build], AS_HELP_STRING([--enable-subproject-build],
 	[enable sub-project build [default=no]]))
