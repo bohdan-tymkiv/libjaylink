@@ -64,7 +64,7 @@
  *
  * @section sec_website Website
  *
- * <a href="http://git.zapb.de/libjaylink.git">git.zapb.de/libjaylink.git</a>
+ * <a href="https://gitlab.zapb.de/libjaylink/libjaylink.git">gitlab.zapb.de/libjaylink/libjaylink.git</a>
  */
 
 /**
