@@ -267,6 +267,8 @@ JAYLINK_PRIV bool socket_sendto(int sock, const void *buffer, size_t *length,
 		size_t address_length);
 JAYLINK_PRIV bool socket_recvfrom(int sock, void *buffer, size_t *length,
 		int flags, struct sockaddr *address, size_t *address_length);
+JAYLINK_PRIV bool socket_get_option(int sock, int level, int option,
+		void *value, size_t *length);
 JAYLINK_PRIV bool socket_set_option(int sock, int level, int option,
 		const void *value, size_t length);
 

@@ -237,6 +237,26 @@ JAYLINK_PRIV bool socket_recvfrom(int sock, void *buffer, size_t *length,
 }
 
 /**
+ * Get the value of a socket option.
+ *
+ * @param[in] sock Socket descriptor.
+ * @param[in] level Level at which the option is defined.
+ * @param[in] option Option to get the value for.
+ * @param[in] value Buffer to store the value.
+ * @param[in] length Length of the value buffer in bytes.
+ *
+ * @return Whether the option value was retrieved successfully.
+ */
+JAYLINK_PRIV bool socket_get_option(int sock, int level, int option,
+		void *value, size_t *length)
+{
+	if (!getsockopt(sock, level, option, value, (socklen_t *)length))
+		return true;
+
+	return false;
+}
+
+/**
  * Set an option on a socket.
  *
  * @param[in] sock Socket descriptor.
