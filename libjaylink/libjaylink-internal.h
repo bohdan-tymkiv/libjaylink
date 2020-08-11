@@ -271,6 +271,7 @@ JAYLINK_PRIV bool socket_get_option(int sock, int level, int option,
 		void *value, size_t *length);
 JAYLINK_PRIV bool socket_set_option(int sock, int level, int option,
 		const void *value, size_t length);
+JAYLINK_PRIV bool socket_set_blocking(int sock, bool blocking);
 
 /*--- transport.c -----------------------------------------------------------*/
 

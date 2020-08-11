@@ -23,6 +23,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <fcntl.h>
 #endif
 
 #include "libjaylink.h"
@@ -274,4 +275,44 @@ JAYLINK_PRIV bool socket_set_option(int sock, int level, int option,
 		return true;
 
 	return false;
+}
+
+/**
+ * Set the blocking mode of a socket.
+ *
+ * @param[in] sock Socket descriptor.
+ * @param[in] blocking Blocking mode.
+ *
+ * @return Whether the blocking mode was set successfully.
+ */
+JAYLINK_PRIV bool socket_set_blocking(int sock, bool blocking)
+{
+	int ret;
+#ifdef _WIN32
+	u_long mode;
+
+	mode = !blocking;
+	ret = ioctlsocket(sock, FIONBIO, &mode);
+
+	if (ret != NO_ERROR)
+		return false;
+#else
+	int flags;
+
+	flags = fcntl(sock, F_GETFL, 0);
+
+	if (flags < 0)
+		return false;
+
+	if (blocking)
+		flags &= ~O_NONBLOCK;
+	else
+		flags |= O_NONBLOCK;
+
+	ret = fcntl(sock, F_SETFL, flags);
+
+	if (ret != 0)
+		return false;
+#endif
+	return true;
 }
