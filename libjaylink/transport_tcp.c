@@ -55,6 +55,8 @@
 /** Buffer size in bytes. */
 #define BUFFER_SIZE	2048
 
+/** Timeout for connection establishment in milliseconds. */
+#define CONNECT_TIMEOUT	5000
 /** Timeout of a receive operation in milliseconds. */
 #define RECV_TIMEOUT	5000
 /** Timeout of a send operation in milliseconds. */
@@ -267,8 +269,16 @@ JAYLINK_PRIV int transport_tcp_open(struct jaylink_device_handle *devh)
 		if (sock < 0)
 			continue;
 
-		if (!connect(sock, info->ai_addr, info->ai_addrlen))
+		ret = socket_connect(sock, info->ai_addr, info->ai_addrlen,
+			CONNECT_TIMEOUT);
+
+		if (ret == JAYLINK_ERR_TIMEOUT) {
+			freeaddrinfo(info);
+			cleanup_handle(devh);
+			return JAYLINK_ERR_TIMEOUT;
+		} else if (ret == JAYLINK_OK) {
 			break;
+		}
 
 		socket_close(sock);
 		sock = -1;
