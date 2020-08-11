@@ -156,7 +156,9 @@ enum jaylink_device_capability {
 	/** Device supports EMUCOM. */
 	JAYLINK_DEV_CAP_EMUCOM = 33,
 	/** Device supports ethernet connectivity. */
-	JAYLINK_DEV_CAP_ETHERNET = 38
+	JAYLINK_DEV_CAP_ETHERNET = 38,
+	/** Device supports SPI. */
+	JAYLINK_DEV_CAP_SPI = 56,
 };
 
 /** Hardware information. */
@@ -240,6 +242,8 @@ enum jaylink_target_interface {
 	JAYLINK_TIF_FINE = 3,
 	/** 2-wire JTAG for PIC32 compliant devices. */
 	JAYLINK_TIF_2W_JTAG_PIC32 = 4,
+	/** Serial Peripheral Interface (SPI). */
+	JAYLINK_TIF_SPI = 5,
 	/** Compact JTAG (cJTAG). **/
 	JAYLINK_TIF_CJTAG = 7,
 };
@@ -266,6 +270,22 @@ enum jaylink_jtag_version {
 enum jaylink_swo_mode {
 	/** Universal Asynchronous Receiver Transmitter (UART). */
 	JAYLINK_SWO_MODE_UART = 0
+};
+
+/** Serial Peripheral Interface (SPI) flags. */
+enum jaylink_spi_flag {
+	/** Do not drive chip select (CS) before the transfer begins. */
+	JAYLINK_SPI_FLAG_CS_START_U = 0x00,
+	/** Drive chip select (CS) low before the transfer begins. */
+	JAYLINK_SPI_FLAG_CS_START_0 = 0x02,
+	/** Drive chip select (CS) high before the transfer begins. */
+	JAYLINK_SPI_FLAG_CS_START_1 = 0x03,
+	/** Do not drive chip select (CS) after the transfer is complete. */
+	JAYLINK_SPI_FLAG_CS_END_U = 0x00,
+	/** Drive chip select (CS) low after the transfer is complete. */
+	JAYLINK_SPI_FLAG_CS_END_0 = 0x08,
+	/** Drive chip select (CS) high after the transfer is complete. */
+	JAYLINK_SPI_FLAG_CS_END_1 = 0x0c,
 };
 
 /** Target interface speed information. */
@@ -568,6 +588,12 @@ JAYLINK_API int jaylink_log_set_domain(struct jaylink_context *ctx,
 		const char *domain);
 JAYLINK_API const char *jaylink_log_get_domain(
 		const struct jaylink_context *ctx);
+
+/*--- spi.c -----------------------------------------------------------------*/
+
+JAYLINK_API int jaylink_spi_io(struct jaylink_device_handle *devh,
+		const uint8_t *mosi, uint8_t *miso, uint32_t length,
+		uint32_t flags);
 
 /*--- strutil.c -------------------------------------------------------------*/
 

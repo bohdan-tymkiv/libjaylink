@@ -40,6 +40,7 @@ libjaylink_la_SOURCES = \
 	list.c \
 	log.c \
 	socket.c \
+	spi.c \
 	strutil.c \
 	swd.c \
 	swo.c \
