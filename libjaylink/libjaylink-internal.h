@@ -255,6 +255,8 @@ JAYLINK_PRIV void log_dbgio(const struct jaylink_context *ctx,
 
 /*--- socket.c --------------------------------------------------------------*/
 
+JAYLINK_PRIV int socket_connect(int sock, const struct sockaddr *address,
+		size_t address_length, size_t timeout);
 JAYLINK_PRIV bool socket_close(int sock);
 JAYLINK_PRIV bool socket_bind(int sock, const struct sockaddr *address,
 		size_t length);

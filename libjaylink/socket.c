@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <errno.h>
 #ifdef _WIN32
 #include <winsock2.h>
 #else
@@ -34,6 +35,73 @@
  *
  * Socket abstraction layer.
  */
+
+/**
+ * Initiate a connection on a socket.
+ *
+ * @param[in] sock Socket descriptor.
+ * @param[in] address Address to establish the connection.
+ * @param[in] length Length of the structure pointed to by @p address in bytes.
+ * @param[in] timeout Connection timeout in milliseconds, 0 for no timeout.
+ *
+ * @retval JAYLINK_OK Success.
+ * @retval JAYLINK_ERR_ARG Invalid arguments.
+ * @retval JAYLINK_ERR_TIMEOUT A timeout occurred.
+ * @retval JAYLINK_ERR Other error conditions.
+ */
+JAYLINK_PRIV int socket_connect(int sock, const struct sockaddr *address,
+		size_t address_length, size_t timeout)
+{
+	int ret;
+	fd_set fds;
+	struct timeval tv;
+	int socket_error;
+	size_t option_length;
+
+	if (!address)
+		return JAYLINK_ERR_ARG;
+
+	if (!socket_set_blocking(sock, false))
+		return JAYLINK_ERR;
+#ifdef _WIN32
+	ret = connect(sock, address, address_length);
+
+	if (ret != 0 && WSAGetLastError() != WSAEWOULDBLOCK)
+		return JAYLINK_ERR;
+#else
+	errno = 0;
+	ret = connect(sock, address, address_length);
+
+	if (ret != 0 && errno != EINPROGRESS)
+		return JAYLINK_ERR;
+#endif
+	if (!ret)
+		return JAYLINK_OK;
+
+	FD_ZERO(&fds);
+	FD_SET(sock, &fds);
+
+	tv.tv_sec = timeout / 1000;
+	tv.tv_usec = (timeout % 1000) * 1000;
+
+	ret = select(sock + 1, NULL, &fds, NULL, &tv);
+
+	socket_set_blocking(sock, true);
+
+	if (!ret)
+		return JAYLINK_ERR_TIMEOUT;
+
+	option_length = sizeof(socket_error);
+
+	if (!socket_get_option(sock, SOL_SOCKET, SO_ERROR, &socket_error,
+			&option_length))
+		return JAYLINK_ERR;
+
+	if (!socket_error)
+		return JAYLINK_OK;
+
+	return JAYLINK_ERR;
+}
 
 /**
  * Close a socket.
