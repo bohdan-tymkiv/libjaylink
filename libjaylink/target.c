@@ -217,6 +217,7 @@ JAYLINK_API int jaylink_select_interface(struct jaylink_device_handle *devh,
 	case JAYLINK_TIF_BDM3:
 	case JAYLINK_TIF_FINE:
 	case JAYLINK_TIF_2W_JTAG_PIC32:
+	case JAYLINK_TIF_CJTAG:
 		break;
 	default:
 		return JAYLINK_ERR_ARG;

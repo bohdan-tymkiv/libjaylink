@@ -116,6 +116,8 @@ JAYLINK_API const char *jaylink_target_interface_string(
 		return "FINE";
 	case JAYLINK_TIF_2W_JTAG_PIC32:
 		return "2-wire JTAG for PIC32";
+	case JAYLINK_TIF_CJTAG:
+		return "cJTAG";
 	default:
 		break;
 	}

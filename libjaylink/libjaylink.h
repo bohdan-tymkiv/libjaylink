@@ -240,6 +240,8 @@ enum jaylink_target_interface {
 	JAYLINK_TIF_FINE = 3,
 	/** 2-wire JTAG for PIC32 compliant devices. */
 	JAYLINK_TIF_2W_JTAG_PIC32 = 4,
+	/** Compact JTAG (cJTAG). **/
+	JAYLINK_TIF_CJTAG = 7,
 };
 
 /**
