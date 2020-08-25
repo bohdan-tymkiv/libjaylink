@@ -206,7 +206,9 @@ enum jaylink_hardware_info {
 	 * @note The value is valid only if the device is configured in DHCP
 	 *       mode.
 	 */
-	JAYLINK_HW_INFO_IPV4_DNS = (1 << 19)
+	JAYLINK_HW_INFO_IPV4_DNS = (1 << 19),
+	/** USB voltage in mV. */
+	JAYLINK_HW_INFO_VUSB = (1 << 23),
 };
 
 /** Device counters. */
