@@ -326,7 +326,7 @@ JAYLINK_PRIV bool socket_get_option(int sock, int level, int option,
 }
 
 /**
- * Set an option on a socket.
+ * Set the value of a socket option.
  *
  * @param[in] sock Socket descriptor.
  * @param[in] level Level at which the option is defined.
@@ -334,7 +334,7 @@ JAYLINK_PRIV bool socket_get_option(int sock, int level, int option,
  * @param[in] value Buffer of the value to be set.
  * @param[in] length Length of the value buffer in bytes.
  *
- * @return Whether the option was set successfully.
+ * @return Whether the option value was set successfully.
  */
 JAYLINK_PRIV bool socket_set_option(int sock, int level, int option,
 		const void *value, size_t length)
