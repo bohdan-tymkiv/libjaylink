@@ -24,22 +24,14 @@
 m4_define([_JAYLINK_SET_PACKAGE_VERSION], [
 	m4_assert([$# == 5])
 
-	# Get the short Git revision hash of the current commit.
-	git_version=`git --git-dir="$srcdir/.git" rev-parse \
-		--short HEAD 2> /dev/null`
+	# Get the Git repository description. Ensure that we use our Git
+	# repository even when there is a parent Git repository.
+	git_version=`git -C "$srcdir" --git-dir=.git describe --dirty 2> /dev/null`
 
-	# Try to get the release tag for the package version from the current
-	# commit.
-	tag=`git --git-dir="$srcdir/.git" describe --match "$2" \
-		--exact-match 2> /dev/null`
-
-	version=$2
-
-	# If Git is available, append the short Git revision hash of the
-	# current commit to the version string if there is no release tag for
-	# the package version on it.
-	AS_IF([test -n "$git_version" && test -z "$tag"],
-		[version="$version-git-$git_version"])
+	# If available, use the Git description as package version. Otherwise,
+	# use the version provided by Autoconf.
+	AS_IF([test -n "$git_version"], [version="$git_version"],
+		[version="$2"])
 
 	AC_SUBST([$1_MAJOR], [$3])
 	AC_SUBST([$1_MINOR], [$4])
