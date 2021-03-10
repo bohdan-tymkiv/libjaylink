@@ -34,6 +34,8 @@
 #define CMD_JTAG_IO_V3		0xcf
 #define CMD_JTAG_CLEAR_TRST	0xde
 #define CMD_JTAG_SET_TRST	0xdf
+#define CMD_JTAG_CLEAR_TMS	0xc9
+#define CMD_JTAG_SET_TMS	0xca
 
 /**
  * Error code indicating that there is not enough free memory on the device to
@@ -246,6 +248,94 @@ JAYLINK_API int jaylink_jtag_set_trst(struct jaylink_device_handle *devh)
 	}
 
 	buf[0] = CMD_JTAG_SET_TRST;
+
+	ret = transport_write(devh, buf, 1);
+
+	if (ret != JAYLINK_OK) {
+		log_err(ctx, "transport_write() failed: %s",
+			jaylink_strerror(ret));
+		return ret;
+	}
+
+	return JAYLINK_OK;
+}
+
+/**
+ * Clear the JTAG test mode select (TMS) signal.
+ *
+ * @param[in,out] devh Device handle.
+ *
+ * @retval JAYLINK_OK Success.
+ * @retval JAYLINK_ERR_ARG Invalid arguments.
+ * @retval JAYLINK_ERR_TIMEOUT A timeout occurred.
+ * @retval JAYLINK_ERR_IO Input/output error.
+ * @retval JAYLINK_ERR Other error conditions.
+ *
+ * @since 0.3.0
+ */
+JAYLINK_API int jaylink_jtag_clear_tms(struct jaylink_device_handle *devh)
+{
+	int ret;
+	struct jaylink_context *ctx;
+	uint8_t buf[1];
+
+	if (!devh)
+		return JAYLINK_ERR_ARG;
+
+	ctx = devh->dev->ctx;
+	ret = transport_start_write(devh, 1, true);
+
+	if (ret != JAYLINK_OK) {
+		log_err(ctx, "transport_start_write() failed: %s",
+			jaylink_strerror(ret));
+		return ret;
+	}
+
+	buf[0] = CMD_JTAG_CLEAR_TMS;
+
+	ret = transport_write(devh, buf, 1);
+
+	if (ret != JAYLINK_OK) {
+		log_err(ctx, "transport_write() failed: %s",
+			jaylink_strerror(ret));
+		return ret;
+	}
+
+	return JAYLINK_OK;
+}
+
+/**
+ * Set the JTAG test mode select (TMS) signal.
+ *
+ * @param[in,out] devh Device handle.
+ *
+ * @retval JAYLINK_OK Success.
+ * @retval JAYLINK_ERR_ARG Invalid arguments.
+ * @retval JAYLINK_ERR_TIMEOUT A timeout occurred.
+ * @retval JAYLINK_ERR_IO Input/output error.
+ * @retval JAYLINK_ERR Other error conditions.
+ *
+ * @since 0.3.0
+ */
+JAYLINK_API int jaylink_jtag_set_tms(struct jaylink_device_handle *devh)
+{
+	int ret;
+	struct jaylink_context *ctx;
+	uint8_t buf[1];
+
+	if (!devh)
+		return JAYLINK_ERR_ARG;
+
+	ctx = devh->dev->ctx;
+	ret = transport_start_write(devh, 1, true);
+
+	if (ret != JAYLINK_OK) {
+		log_err(ctx, "transport_start_write() failed: %s",
+			jaylink_strerror(ret));
+		return ret;
+	}
+
+	buf[0] = CMD_JTAG_SET_TMS;
 
 	ret = transport_write(devh, buf, 1);
 
