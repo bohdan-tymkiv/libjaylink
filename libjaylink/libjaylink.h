@@ -577,6 +577,8 @@ JAYLINK_API int jaylink_jtag_clear_trst(struct jaylink_device_handle *devh);
 JAYLINK_API int jaylink_jtag_set_trst(struct jaylink_device_handle *devh);
 JAYLINK_API int jaylink_jtag_clear_tms(struct jaylink_device_handle *devh);
 JAYLINK_API int jaylink_jtag_set_tms(struct jaylink_device_handle *devh);
+JAYLINK_API int jaylink_jtag_clear_tck(struct jaylink_device_handle *devh);
+JAYLINK_API int jaylink_jtag_set_tck(struct jaylink_device_handle *devh);
 
 /*--- log.c -----------------------------------------------------------------*/
 
